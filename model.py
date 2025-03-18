@@ -1,3 +1,7 @@
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning, module="xgboost")
+
 from functools import partial
 
 import optuna

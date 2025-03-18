@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import xgboost as xgb
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score
@@ -128,4 +129,4 @@ def feat_eng(df, train=False):
         )
         X_blind = preprocessor.fit_transform(X)
 
-        return X_blind
+        return xgb.DMatrix(X_blind)
