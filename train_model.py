@@ -8,7 +8,7 @@ import xgboost as xgb
 from feat_eng import feat_eng
 from model import optimize_xgboost
 
-warnings.filterwarnings("ignore", category=UserWarning, module="xgboost")
+#warnings.filterwarnings("ignore", category=UserWarning, module="xgboost")
 
 def train_model(data_path, train_flag, n_trials=20, model_path="model.pkl"):
     if not train_flag:
@@ -66,7 +66,13 @@ def inference(data_path, model_path="model.pkl"):
     
     # Make predictions
     try:
-        predictions = pd.DataFrame({'Predicted': model.predict(X)})
+        pred_prob = model.predict(X)
+        predicted_y = (pred_prob > 0.5).astype(int)
+        predicted_y = pd.DataFrame({'Transported': predicted_y})
+        predictions = pd.merge(inference_data['PassengerId'], predicted_y, left_index=True, right_index=True)
+        #predictions = predictions.rename(columns={0:'Transported'})
+        predictions['Transported'] = predictions['Transported'].map({0:False, 1:True})
+
         return predictions
     except Exception as e:
         raise Exception(f"Prediction failed: {str(e)}")

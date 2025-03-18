@@ -1,8 +1,8 @@
 import os
+import warnings
+from datetime import datetime
 
 os.environ['PYTHONWARNINGS'] = 'ignore'
-import warnings
-
 warnings.filterwarnings('ignore')
 
 
@@ -63,9 +63,11 @@ if __name__ == "__main__":
             print("\nInference complete!")
             print(f"Predictions shape: {predictions.shape}")
             # Save predictions to CSV
-            output_path = "submissions/predictions.csv"
-            predictions.to_csv(output_path, index=False)
-            print(f"Predictions saved to: {output_path}")
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"submissionxgboost_{timestamp}.csv"
+            filepath = os.path.join(r"submissions/", filename)
+            predictions.to_csv(filepath, index=False)
+            print(f"Predictions saved to: {filepath}")
     except Exception as e:
         print(f"Error: {str(e)}")
         sys.exit(1)
